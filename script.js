@@ -3,12 +3,28 @@ const quoteText = document.getElementById('quote');
 const authorText = document.getElementById('author');
 const twitterBtn = document.getElementById('twitter');
 const newQuoteBtn = document.getElementById('new-quote');
+const loader = document.getElementById('loader');
+
+// Show loader
+function loading() {
+    loader.hidden = false;
+    quoteContainer.hidden = true;
+}
+
+// Hide loader
+function complete() {
+    if (!loader.hidden) {
+        quoteContainer.hidden = false;
+        loader.hidden = true;
+    }
+}
 
 // Get quote from API
 async function getQuote() {
-    const proxyUrl = 'https://api.allorigins.win/'; // to eliminate CORS policy violation
+    loading();
+    //Need to use a Proxy URL to make our APU call in order to avoid CORS policy violation
+    const proxyUrl = 'https://api.allorigins.win/';
     const apiUrl = 'http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json';
-
     const response = await fetch(`${proxyUrl}get?url=${encodeURIComponent(apiUrl)}`)
         .then(response => {
             if (response.ok) return response.json();
@@ -17,6 +33,7 @@ async function getQuote() {
         .then(data => {
             try {
                 quoteData = JSON.parse(data.contents);
+                // Check is Author field is blank and replace with 'Unknown'
                 if (quoteData.quoteAuthor === '') {
                     authorText.innerText = 'Unknown';
                 } else {
@@ -29,6 +46,8 @@ async function getQuote() {
                     quoteText.classList.remove('long-quote');
                 }
                 quoteText.innerText = quoteData.quoteText;
+                // Stop loader, show quote
+                complete();
             } catch (error) {
                 getQuote();
             }
