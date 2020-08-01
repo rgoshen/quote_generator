@@ -74,11 +74,15 @@ button:active {
     box-shadow: 0 0.3rem rgba(255, 255, 255, 0.7);
 }
 
-.facebook-button:hover {
-    color: #3b5998;
+.twitter-button {
+    color: ##F5F8FA
 }
 
-.fa-facebook {
+.twitter-button:hover {
+    color: #1DA1F2;
+}
+
+.fa-twitter {
     font-size: 1.5rem;
 }
 
